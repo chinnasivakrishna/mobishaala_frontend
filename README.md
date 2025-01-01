@@ -230,14 +230,6 @@ wsService.subscribe('chat-message', handleChatMessage);
    - Check available disk space
    - Ensure proper encoding support
 
-## Support
-For additional support or questions, please contact:
-- Email: support@mobishaala.com
-- Documentation: [docs.mobishaala.com](https://docs.mobishaala.com)
-- GitHub Issues: [github.com/mobishaala/issues](https://github.com/mobishaala/issues)
-
-## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 ```
 
 This README provides:
