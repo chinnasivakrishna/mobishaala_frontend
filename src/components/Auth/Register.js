@@ -10,114 +10,166 @@ const Register = () => {
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    role: 'student' // default role
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
+      setLoading(false);
       return;
     }
 
     try {
+      // Register user
       const response = await authService.register({
         name: formData.name,
         email: formData.email,
-        password: formData.password
+        password: formData.password,
+        role: formData.role
       });
+
+      console.log('Registration successful:', response);
+
+      // Automatically log in after successful registration
+      await login(formData.email, formData.password);
       
-      login(response.data);
-      navigate('/dashboard');
+      // Redirect based on role
+      navigate(formData.role === 'teacher' ? '/dashboard' : '/classes');
+      
     } catch (err) {
-      setError(err.response?.data?.error || 'Registration failed');
+      console.error('Registration error:', err);
+      setError(err.response?.data?.message || 'Failed to register. Please try again.');
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   return (
     <div className="auth-container">
-      <div className="auth-card">
-        <h2>Create Account</h2>
-        {error && <div className="error-message">{error}</div>}
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-group">
-            <label htmlFor="name">Full Name</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              placeholder="Enter your full name"
-            />
+      <form onSubmit={handleSubmit} className="auth-form">
+        <h2><i className="fas fa-user-plus"></i> Register</h2>
+        
+        {error && (
+          <div className="error-message">
+            <i className="fas fa-exclamation-circle"></i> {error}
           </div>
+        )}
 
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
+        <div className="form-group">
+          <i className="fas fa-user input-icon"></i>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Full Name"
+            required
+            disabled={loading}
+          />
+        </div>
+
+        <div className="form-group">
+          <i className="fas fa-envelope input-icon"></i>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email Address"
+            required
+            disabled={loading}
+          />
+        </div>
+
+        <div className="form-group">
+          <i className="fas fa-lock input-icon"></i>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Password"
+            required
+            disabled={loading}
+          />
+        </div>
+
+        <div className="form-group">
+          <i className="fas fa-lock input-icon"></i>
+          <input
+            type="password"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            placeholder="Confirm Password"
+            required
+            disabled={loading}
+          />
+        </div>
+
+        <div className="form-group role-selection">
+          <label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
+              type="radio"
+              name="role"
+              value="student"
+              checked={formData.role === 'student'}
               onChange={handleChange}
-              required
-              placeholder="Enter your email"
+              disabled={loading}
             />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <i className="fas fa-user-graduate"></i> Student
+          </label>
+          <label>
             <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
+              type="radio"
+              name="role"
+              value="teacher"
+              checked={formData.role === 'teacher'}
               onChange={handleChange}
-              required
-              placeholder="Create a password"
-              minLength="6"
+              disabled={loading}
             />
-          </div>
+            <i className="fas fa-chalkboard-teacher"></i> Teacher
+          </label>
+        </div>
 
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-              placeholder="Confirm your password"
-            />
-          </div>
+        <button type="submit" disabled={loading} className="submit-btn">
+          {loading ? (
+            <>
+              <i className="fas fa-spinner fa-spin"></i> Registering...
+            </>
+          ) : (
+            <>
+              <i className="fas fa-user-plus"></i> Register
+            </>
+          )}
+        </button>
 
-          <button type="submit" className="auth-button">
-            Register
-          </button>
-        </form>
-
-        <div className="auth-footer">
+        <div className="auth-links">
           Already have an account?{' '}
-          <Link to="/login" className="auth-link">
-            Login here
+          <Link to="/login" className="login-link">
+            <i className="fas fa-sign-in-alt"></i> Login
           </Link>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
