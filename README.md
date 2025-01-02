@@ -1,245 +1,70 @@
+# Getting Started with Create React App
 
-# MobiShaala - Interactive Online Learning Platform
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Table of Contents
-1. [Overview](#overview)
-2. [Features](#features)
-3. [Technology Stack](#technology-stack)
-4. [Architecture](#architecture)
-5. [Installation](#installation)
-6. [Configuration](#configuration)
-7. [Usage](#usage)
-8. [API Documentation](#api-documentation)
-9. [WebSocket Integration](#websocket-integration)
-10. [Video/Audio Features](#videoaudio-features)
-11. [Security](#security)
-12. [Deployment](#deployment)
-13. [Troubleshooting](#troubleshooting)
+## Available Scripts
 
-## Overview
-MobiShaala is a comprehensive online learning platform that enables real-time video classes, audio/video recording, and interactive learning experiences. The platform supports both teachers and students with role-based access and features.
+In the project directory, you can run:
 
-### Purpose
-- Facilitate remote learning through live video classes
-- Enable recording of sessions for future reference
-- Provide interactive learning experiences
-- Support both synchronous and asynchronous learning
+### `npm start`
 
-## Features
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-### Authentication
-- User registration with role selection (Teacher/Student)
-- Secure login with JWT authentication
-- Password encryption using bcrypt
-- Role-based access control
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-### Video Conferencing
-- Real-time video/audio streaming using 100ms SDK
-- Multiple participant support
-- Screen sharing capabilities
-- Video/Audio mute controls
-- Recording functionality
+### `npm test`
 
-### Class Management
-- Create and schedule classes
-- Join classes using unique room IDs
-- Record sessions (video/audio)
-- View recorded sessions
-- Real-time chat during sessions
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-## Technology Stack
+### `npm run build`
 
-### Frontend
-- React.js
-- 100ms SDK for video
-- WebSocket for real-time communication
-- Axios for HTTP requests
-- Font Awesome for icons
-- CSS3 for styling
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-### Backend
-- Node.js
-- Express.js
-- MongoDB
-- WebSocket (Socket.io)
-- JWT for authentication
-- 100ms API integration
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-## Architecture
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### Frontend Structure
-```
-frontend/
-├── public/
-├── src/
-│   ├── components/
-│   │   ├── Auth/
-│   │   ├── Dashboard/
-│   │   ├── VideoRoom/
-│   │   └── Common/
-│   ├── services/
-│   │   ├── api.js
-│   │   └── websocket.js
-│   ├── context/
-│   │   └── AuthContext.js
-│   └── App.js
-```
+### `npm run eject`
 
-### Backend Structure
-```
-backend/
-├── controllers/
-├── models/
-├── routes/
-├── middleware/
-├── config/
-└── server.js
-```
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-## Installation
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-### Prerequisites
-- Node.js (v14 or higher)
-- MongoDB
-- 100ms account and credentials
-- npm or yarn
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-### Frontend Setup
-```bash
-cd frontend
-npm install
-cp .env.example .env # Configure environment variables
-npm start
-```
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-### Backend Setup
-```bash
-cd backend
-npm install
-cp .env.example .env # Configure environment variables
-npm start
-```
+## Learn More
 
-## Configuration
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-### Environment Variables
-```env
-# Frontend
-REACT_APP_API_URL=https://mobishaala-backend.onrender.com/api
-REACT_APP_WS_URL=wss://mobishaala-backend.onrender.com
-REACT_APP_HMS_ENDPOINT=https://prod-in2.100ms.live
-REACT_APP_HMS_TEMPLATE_ID=your_template_id
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-# Backend
-PORT=5000
-MONGODB_URI=your_mongodb_uri
-JWT_SECRET=your_jwt_secret
-HMS_ACCESS_KEY=your_100ms_access_key
-HMS_SECRET=your_100ms_secret
-```
+### Code Splitting
 
-## Video/Audio Features
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Recording Implementation
-1. Uses RecordRTC for client-side recording
-2. Supports both video and audio-only recording
-3. Implements chunked upload for large files
-4. Stores recordings in cloud storage
+### Analyzing the Bundle Size
 
-### Recording Process
-```javascript
-// Start Recording
-const startRecording = async (audioOnly = false) => {
-  const stream = await navigator.mediaDevices.getUserMedia({
-    video: !audioOnly,
-    audio: true
-  });
-  const recorder = new RecordRTC(stream, {
-    type: 'video',
-    mimeType: 'video/webm'
-  });
-  recorder.startRecording();
-};
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-// Stop Recording
-const stopRecording = async () => {
-  recorder.stopRecording(() => {
-    const blob = recorder.getBlob();
-    uploadRecording(blob);
-  });
-};
-```
+### Making a Progressive Web App
 
-## WebSocket Integration
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Real-time Communication
-- Uses WebSocket for real-time updates
-- Handles reconnection automatically
-- Implements heartbeat mechanism
-- Manages room-specific events
+### Advanced Configuration
 
-### Event Handling
-```javascript
-wsService.subscribe('user-joined', handleUserJoined);
-wsService.subscribe('user-left', handleUserLeft);
-wsService.subscribe('chat-message', handleChatMessage);
-```
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-## Security
+### Deployment
 
-### Implemented Security Measures
-1. JWT Authentication
-2. Password Hashing
-3. CORS Protection
-4. Rate Limiting
-5. Input Validation
-6. XSS Protection
-7. CSRF Protection
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-## Advantages
-1. Real-time interactive learning
-2. Recording capabilities for future reference
-3. Role-based access control
-4. Scalable architecture
-5. Cross-platform compatibility
-6. Low latency video streaming
-7. Secure communication
+### `npm run build` fails to minify
 
-## Disadvantages
-1. Requires stable internet connection
-2. Browser compatibility issues
-3. Storage limitations for recordings
-4. Bandwidth consumption
-5. Initial setup complexity
-
-## Troubleshooting
-
-### Common Issues
-1. Video/Audio not working
-   - Check browser permissions
-   - Verify device connections
-   - Clear browser cache
-
-2. Connection Issues
-   - Check internet connectivity
-   - Verify WebSocket connection
-   - Check API endpoint status
-
-3. Recording Issues
-   - Verify storage permissions
-   - Check available disk space
-   - Ensure proper encoding support
-
-```
-
-This README provides:
-1. Complete project overview
-2. Detailed setup instructions
-3. Architecture explanation
-4. Feature documentation
-5. Security considerations
-6. Troubleshooting guide
-7. Configuration details
-8. Code examples
-9. Best practices
-10. Support information
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
