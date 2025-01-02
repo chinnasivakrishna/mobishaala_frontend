@@ -45,7 +45,7 @@ const Register = () => {
       await login(formData.email, formData.password);
       
       // Redirect based on role
-      navigate(formData.role === 'teacher' ? '/dashboard' : '/classes');
+      navigate( '/dashboard');
       
     } catch (err) {
       console.error('Registration error:', err);
