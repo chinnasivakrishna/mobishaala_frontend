@@ -32,7 +32,6 @@ export const AuthProvider = ({ children }) => {
       
       Cookies.set('user', JSON.stringify(user), { 
         expires: 7,
-        sameSite: 'strict',
         secure: process.env.NODE_ENV === 'production'
       });
       
